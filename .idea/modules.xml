@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/normativ_django.iml" filepath="$PROJECT_DIR$/.idea/normativ_django.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/u13_normativ_djangoo.iml" filepath="$PROJECT_DIR$/.idea/u13_normativ_djangoo.iml" />
+>>>>>>> ce65328 (2-normativ)
     </modules>
   </component>
 </project>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telefonni o'chirish</title>
+</head>
+<body>
+    <h1>Telefonni o'chirish</h1>
+    <h2>“{{ phone.name }}” telefonini o'chirmoqchimisiz?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Ha o'chirish</button>
+        <a href="{% url 'phone_list' %}">Bekor qilish</a>
+    </form>
+</body>
+</html>
