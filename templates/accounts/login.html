@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block main %}
+
+<h1> Login</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit" style="background-color: green; color: white; padding: 8px 15px;">
+        Login
+    </button>
+</form>
+
+{% if form.errors %}
+    <p style="color:red;">
+        Username yoki password noto‘g‘ri
+    </p>
+{% endif %}
+
+{% endblock %}

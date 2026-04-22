@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Phone Detail{% endblock %}
+
+{% block main %}
+
+<div class="card p-4">
+
+    <h2>{{ phone.brand.name }} {{ phone.name }}</h2>
+
+    <p class="text-muted mt-3">
+        {{ phone.description|default:"No description" }}
+    </p>
+
+    <h4 class="text-success">${{ phone.price }}</h4>
+
+    <p>
+        {% if phone.in_stock %}
+            <span class="badge bg-success">In Stock</span>
+        {% else %}
+            <span class="badge bg-danger">Out of Stock</span>
+        {% endif %}
+    </p>
+
+</div>
+
+{% endblock %}

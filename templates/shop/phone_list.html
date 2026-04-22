@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Phone List{% endblock %}
+
+{% block main %}
+
+<div class="d-flex justify-content-between mb-4">
+    <h2>📱 Phone List</h2>
+    <a href="{% url 'phone_create' %}" class="btn btn-primary">
+        + Add Phone
+    </a>
+</div>
+
+<div class="row">
+
+    {% for phone in phones %}
+    <div class="col-md-4 mb-4">
+
+        <div class="card p-3">
+
+            <h5>{{ phone.brand.name }} {{ phone.name }}</h5>
+
+            <p class="text-muted">
+                {{ phone.description|default:"No description"|truncatewords:15 }}
+            </p>
+
+            <div class="price mb-2">
+                ${{ phone.price }}
+            </div>
+
+            <div class="d-flex justify-content-between">
+
+                <a href="{% url 'phone_detail' phone.id %}" class="btn btn-info btn-sm">
+                    Detail
+                </a>
+
+                <a href="{% url 'phone_update' phone.id %}" class="btn btn-warning btn-sm">
+                    Edit
+                </a>
+
+                <a href="{% url 'phone_delete' phone.id %}" class="btn btn-danger btn-sm">
+                    Delete
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+    {% empty %}
+        <p>No phones found 😢</p>
+    {% endfor %}
+
+</div>
+
+
+
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.previous_page_number }}&q={{ q }}">
+                    Previous
+                </a>
+            </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link"
+                   href="?page={{ num }}&q={{ q }}">
+                    {{ num }}
+                </a>
+            </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.next_page_number }}&q={{ q }}">
+                    Next
+                </a>
+            </li>
+        {% endif %}
+
+    </ul>
+</nav>
+
+{% endblock %}
