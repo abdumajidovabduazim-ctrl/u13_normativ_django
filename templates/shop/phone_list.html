@@ -34,13 +34,17 @@
                     Detail
                 </a>
 
-                <a href="{% url 'phone_update' phone.id %}" class="btn btn-warning btn-sm">
-                    Edit
-                </a>
+             {% if request.user.is_authenticated and phone.owner == request.user %}
 
-                <a href="{% url 'phone_delete' phone.id %}" class="btn btn-danger btn-sm">
-                    Delete
-                </a>
+    <a href="{% url 'phone_update' phone.id %}" class="btn btn-warning btn-sm">
+        Edit
+    </a>
+
+    <a href="{% url 'phone_delete' phone.id %}" class="btn btn-danger btn-sm">
+        Delete
+    </a>
+
+{% endif %}
 
             </div>
 

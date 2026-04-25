@@ -128,3 +128,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ROOT_URLCONF = 'core.urls'
+LOGIN_URL = '/accounts/login/'

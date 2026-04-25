@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.core.paginator import Paginator
-
+from accounts.utils import login_required
 from .models import Phone
 from .forms import PhoneForm
 
@@ -39,11 +39,14 @@ def phone_detail(request, pk):
 
 
 
+@login_required
 def phone_create(request):
     form = PhoneForm(request.POST or None)
 
     if form.is_valid():
-        form.save()
+        phone = form.save(commit=False)
+        phone.owner = request.user
+        phone.save()
         return redirect('phone_list')
 
     return render(request, 'shop/phone_form.html', {
@@ -51,9 +54,13 @@ def phone_create(request):
     })
 
 
-
+@login_required
 def phone_update(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
+
+    if phone.owner != request.user:
+        return redirect('phone_list')
+
     form = PhoneForm(request.POST or None, instance=phone)
 
     if form.is_valid():
@@ -65,9 +72,12 @@ def phone_update(request, pk):
     })
 
 
-
+@login_required
 def phone_delete(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
+
+    if phone.owner != request.user:
+        return redirect('phone_list')
 
     if request.method == 'POST':
         phone.delete()
