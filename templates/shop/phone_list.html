@@ -6,9 +6,13 @@
 
 <div class="d-flex justify-content-between mb-4">
     <h2>📱 Phone List</h2>
+
+    {% if perms.shop.add_phone %}
     <a href="{% url 'phone_create' %}" class="btn btn-primary">
         + Add Phone
     </a>
+    {% endif %}
+
 </div>
 
 <div class="row">
@@ -34,59 +38,61 @@
                     Detail
                 </a>
 
-             {% if request.user.is_authenticated and phone.owner == request.user %}
+                {% if perms.shop.change_phone and phone.owner == request.user %}
+                <a href="{% url 'phone_update' phone.id %}" class="btn btn-warning btn-sm">
+                    Edit
+                </a>
+                {% endif %}
 
-    <a href="{% url 'phone_update' phone.id %}" class="btn btn-warning btn-sm">
-        Edit
-    </a>
-
-    <a href="{% url 'phone_delete' phone.id %}" class="btn btn-danger btn-sm">
-        Delete
-    </a>
-
-{% endif %}
+                {% if perms.shop.delete_phone and phone.owner == request.user %}
+                <a href="{% url 'phone_delete' phone.id %}" class="btn btn-danger btn-sm">
+                    Delete
+                </a>
+                {% endif %}
 
             </div>
 
         </div>
 
     </div>
+
     {% empty %}
-        <p>No phones found 😢</p>
+    <div class="col-12 text-center text-muted">
+        No phones found 😢
+    </div>
     {% endfor %}
 
 </div>
 
-
-
+<!-- PAGINATION -->
 <nav class="mt-4">
     <ul class="pagination justify-content-center">
 
         {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link"
-                   href="?page={{ page_obj.previous_page_number }}&q={{ q }}">
-                    Previous
-                </a>
-            </li>
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ page_obj.previous_page_number }}&q={{ q }}">
+                Previous
+            </a>
+        </li>
         {% endif %}
 
         {% for num in page_obj.paginator.page_range %}
-            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                <a class="page-link"
-                   href="?page={{ num }}&q={{ q }}">
-                    {{ num }}
-                </a>
-            </li>
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link"
+               href="?page={{ num }}&q={{ q }}">
+                {{ num }}
+            </a>
+        </li>
         {% endfor %}
 
         {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link"
-                   href="?page={{ page_obj.next_page_number }}&q={{ q }}">
-                    Next
-                </a>
-            </li>
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ page_obj.next_page_number }}&q={{ q }}">
+                Next
+            </a>
+        </li>
         {% endif %}
 
     </ul>

@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Telefonni o'chirish</title>
+    <title>Delete Phone</title>
 </head>
 <body>
-    <h1>Telefonni o'chirish</h1>
-    <h2>“{{ phone.name }}” telefonini o'chirmoqchimisiz?</h2>
+
+{% if perms.shop.delete_phone and phone.owner == request.user %}
+
+    <h1>⚠️ Telefonni o'chirish</h1>
+
+    <h3>
+        “{{ phone.name }}” telefonini o'chirmoqchimisiz?
+    </h3>
+
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Ha o'chirish</button>
-        <a href="{% url 'phone_list' %}">Bekor qilish</a>
+        <button type="submit" style="color:white;background:red;">
+            Ha, o'chirish
+        </button>
+
+        <a href="{% url 'phone_list' %}">
+            Bekor qilish
+        </a>
     </form>
+
+{% else %}
+    <h3>Sizda ruxsat yo‘q 🚫</h3>
+    <a href="{% url 'phone_list' %}">Back</a>
+{% endif %}
+
 </body>
 </html>

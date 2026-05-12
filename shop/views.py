@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import permission_required
+
 from accounts.utils import login_required
 from .models import Phone
 from .forms import PhoneForm
@@ -18,21 +20,20 @@ def phone_list(request):
             Q(brand__name__icontains=q)
         )
 
-
-    paginator = Paginator(phones, 6)  # 1 page = 6 ta phone
+    paginator = Paginator(phones, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'shop/phone_list.html', {
-        'phones': page_obj,   # list o‘rniga page_obj
+        'phones': page_obj,
         'page_obj': page_obj,
         'q': q
     })
 
 
-
 def phone_detail(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
+
     return render(request, 'shop/phone_detail.html', {
         'phone': phone
     })
@@ -40,6 +41,7 @@ def phone_detail(request, pk):
 
 
 @login_required
+@permission_required('shop.add_phone', raise_exception=True)
 def phone_create(request):
     form = PhoneForm(request.POST or None)
 
@@ -54,11 +56,14 @@ def phone_create(request):
     })
 
 
+
 @login_required
+@permission_required('shop.change_phone', raise_exception=True)
 def phone_update(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
 
-    if phone.owner != request.user:
+    # object-level permission (OWNER CHECK)
+    if not request.user.has_perm('shop.change_phone') and phone.owner != request.user:
         return redirect('phone_list')
 
     form = PhoneForm(request.POST or None, instance=phone)
@@ -72,11 +77,14 @@ def phone_update(request, pk):
     })
 
 
+
 @login_required
+@permission_required('shop.delete_phone', raise_exception=True)
 def phone_delete(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
 
-    if phone.owner != request.user:
+    # object-level permission (OWNER CHECK)
+    if not request.user.has_perm('shop.delete_phone') and phone.owner != request.user:
         return redirect('phone_list')
 
     if request.method == 'POST':
