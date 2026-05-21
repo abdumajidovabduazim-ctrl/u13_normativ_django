@@ -1,5 +1,51 @@
-﻿__pycache__/
-*.pyc
-db.sqlite3
-.idea/
+﻿# =========================
+# Python cache
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual environment
+# =========================
 .venv/
+venv/
+env/
+
+# =========================
+# Django
+# =========================
+db.sqlite3
+*.sqlite3
+
+# Media / static (agar localda bo‘lsa)
+media/
+staticfiles/
+
+# =========================
+# Environment variables
+# =========================
+.env
+
+# =========================
+# IDE
+# =========================
+.idea/
+.vscode/
+*.swp
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Django migrations (ixtiyoriy, odatda commit qilinadi YO‘Q!)
+# =========================
+# */migrations/__pycache__/
