@@ -12,3 +12,20 @@ def login_required(func):
         return redirect(f'{login_url}?{params}')
 
     return inner
+
+
+from threading import Thread
+from django.core.mail import send_mail
+
+
+def send_email_thread(subject, message, recipient_list):
+    def send():
+        send_mail(
+            subject,
+            message,
+            'abdumajidovabduazim@gmail.com',
+            recipient_list,
+            fail_silently=False,
+        )
+
+    Thread(target=send).start()
