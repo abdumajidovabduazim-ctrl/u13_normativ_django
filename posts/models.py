@@ -8,20 +8,44 @@ class PostQuerySet(models.QuerySet):
 
 class PostManager(models.Manager):
     def get_queryset(self):
-        return PostQuerySet(self.model, using=self._db).filter(is_deleted=False)
+        return PostQuerySet(
+            self.model,
+            using=self._db
+        ).filter(is_deleted=False)
 
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
+
     content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_deleted = models.BooleanField(default=False)
+
+    image = models.ImageField(
+        upload_to='posts/',
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    is_deleted = models.BooleanField(
+        default=False
+    )
 
     objects = PostManager()
+
     all_objects = models.Manager()
 
-    def delete(self, using=None, keep_parents=False):
+    def delete(
+        self,
+        using=None,
+        keep_parents=False
+    ):
         self.is_deleted = True
         self.save()
 

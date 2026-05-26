@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Create Post</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            background:#f5f5f5;
+            padding:40px;
+        }
+
+        .container{
+            width:500px;
+            margin:auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+        }
+
+        h1{
+            text-align:center;
+        }
+
+        button{
+            background:green;
+            color:white;
+            border:none;
+            padding:10px 20px;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            opacity:.8;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>➕ Create Post</h1>
+
+<form
+method="post"
+enctype="multipart/form-data"
+>
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">
+
+    Save Post
+
+</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>
