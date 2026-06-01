@@ -1,25 +1,37 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Login{% endblock %}
+{% block title %}
+    {% trans "Login" %}
+{% endblock %}
 
 {% block main %}
 
-<h1> Login</h1>
+<h1>{% trans "Login" %}</h1>
 
 <form method="post">
     {% csrf_token %}
-accounts_user_user_permissions
+
     {{ form.as_p }}
 
-    <button type="submit" style="background-color: green; color: white; padding: 8px 15px;">
-        Login
+    <button
+        type="submit"
+        style="background-color: green; color: white; padding: 8px 15px;"
+    >
+        {% trans "Login" %}
     </button>
 </form>
 
 {% if form.errors %}
     <p style="color:red;">
-        Username yoki password noto‘g‘ri
+        {% trans "Incorrect username or password" %}
     </p>
 {% endif %}
+
+<p>
+    <a href="{% url 'register' %}">
+        {% trans "Register" %}
+    </a>
+</p>
 
 {% endblock %}

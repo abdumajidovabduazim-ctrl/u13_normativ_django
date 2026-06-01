@@ -46,9 +46,10 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # ← bu
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.RequestLoggerMiddleware',  # ← bundan keyin bo'lishi kerak
 ]
 
 
@@ -135,3 +136,21 @@ EMAIL_USE_TLS = False
 EMAIL_HOST_USER = 'abdumajidovabduazim@gmail.com'
 EMAIL_HOST_PASSWORD = 'sgsh nsio rihv wwoo'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'fayl': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'requests.log',
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        'request_logger': {
+            'handlers': ['fayl'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
