@@ -14,6 +14,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
 
     path('posts/', include('posts.urls')),
+    path('api/', include('shop.urls')),
 ]
 
 urlpatterns += static(

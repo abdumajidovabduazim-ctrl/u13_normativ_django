@@ -9,6 +9,7 @@ urlpatterns = [
     path('shop/', include('shop.urls')),
     path('accounts/', include('accounts.urls')),
     path('posts/', include('posts.urls')),
+    path('api/', include('shop.urls')),
 
     # 🌐 Localization (til almashtirish)
     path('i18n/', include('django.conf.urls.i18n')),

@@ -7,6 +7,8 @@ from accounts.utils import login_required
 from .models import Phone
 from .forms import PhoneForm
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 def phone_list(request):
@@ -94,3 +96,11 @@ def phone_delete(request, pk):
     return render(request, 'shop/phone_confirm_delete.html', {
         'phone': phone
     })
+
+
+
+class TestAPIView(APIView):
+    def get(self, request):
+        return Response({
+            "message": "Hello DRF"
+        })
