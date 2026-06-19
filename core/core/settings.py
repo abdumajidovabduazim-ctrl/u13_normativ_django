@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     'shop',
     'posts',
+    'post',
 
 
     'accounts.apps.AccountsConfig',

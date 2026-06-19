@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     'shop',
     'posts',
     'accounts',
+    'post',
+
+    # 'accounts.apps.AccountsConfig',
+    'rest_framework',
 ]
 
 SITE_ID = 1
