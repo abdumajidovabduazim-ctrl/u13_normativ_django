@@ -122,3 +122,6 @@ def restore_password(request):
         return redirect("login")
 
     return render(request, "accounts/restore_password.html")
+
+
+

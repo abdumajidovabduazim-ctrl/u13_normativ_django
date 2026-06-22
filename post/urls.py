@@ -9,24 +9,12 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register('posts', PostViewSet, basename='posts')
+router.register('', PostViewSet, basename='posts')
 
-urlpatterns = router.urls + [
-    path(
-        'register/',
-        RegisterAPIView.as_view(),
-        name='register'
-    ),
-
-    path(
-        'login/',
-        LoginAPIView.as_view(),
-        name='login'
-    ),
-
-    path(
-        'logout/',
-        LogoutAPIView.as_view(),
-        name='logout'
-    ),
+urlpatterns = [
+    path('register/', RegisterAPIView.as_view(), name='register'),
+    path('login/', LoginAPIView.as_view(), name='login'),
+    path('logout/', LogoutAPIView.as_view(), name='logout'),
 ]
+
+urlpatterns += router.urls

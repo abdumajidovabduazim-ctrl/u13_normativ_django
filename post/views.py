@@ -13,6 +13,7 @@ from .models import Post
 from .serializers import PostSerializer
 class PostListCreateAPIView(APIView):
 
+
     def get(self, request):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
@@ -131,3 +132,9 @@ class LogoutAPIView(APIView):
         return Response(
             {'message': 'Logout successful'}
         )
+
+
+class PostViewSet(ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]

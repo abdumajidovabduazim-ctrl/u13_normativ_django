@@ -49,6 +49,8 @@ INSTALLED_APPS = [
 
     # 'accounts.apps.AccountsConfig',
     'rest_framework',
+    'rest_framework.authtoken',
+
 ]
 
 SITE_ID = 1
@@ -184,4 +186,9 @@ LOGGING = {
             'propagate': False,
         },
     },
+}
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
 }
