@@ -8,7 +8,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Post
 from .serializers import PostSerializer
 class PostListCreateAPIView(APIView):
@@ -138,3 +139,20 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    search_fields=[
+        'title',
+        'content',
+    ]
+    filterset_fields=[
+        'title',
+        'created_at',
+    ]
+    ordering_fields=[
+        'created_at',
+        'title',
+    ]

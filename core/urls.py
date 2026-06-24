@@ -16,6 +16,5 @@ path('posts/', include('posts.urls')),
     path('', include('post.urls')),
     path('api/', include('post.urls')),
 
-    # 🌐 Localization (til almashtirish)
     path('i18n/', include('django.conf.urls.i18n')),
 ]

@@ -9,7 +9,7 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register('', PostViewSet, basename='posts')
+router.register('posts', PostViewSet, basename='posts')
 
 urlpatterns = [
     path('register/', RegisterAPIView.as_view(), name='register'),
