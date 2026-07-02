@@ -1,6 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,15 +9,17 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+
 from .models import Post
 from .serializers import PostSerializer
-class PostListCreateAPIView(APIView):
+from .permission import IsOwnerOrReadOnly
 
+
+class PostListCreateAPIView(APIView):
 
     def get(self, request):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
-
         return Response(serializer.data)
 
     def post(self, request):
@@ -37,6 +38,7 @@ class PostListCreateAPIView(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+
 class PostDetailAPIView(APIView):
 
     def get_object(self, pk):
@@ -44,9 +46,7 @@ class PostDetailAPIView(APIView):
 
     def get(self, request, pk):
         post = self.get_object(pk)
-
         serializer = PostSerializer(post)
-
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -69,18 +69,12 @@ class PostDetailAPIView(APIView):
 
     def delete(self, request, pk):
         post = self.get_object(pk)
-
         post.delete()
 
         return Response(
             {"message": "Post o'chirildi"},
             status=status.HTTP_204_NO_CONTENT
         )
-
-class PostViewSet(ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class RegisterAPIView(APIView):
@@ -104,6 +98,8 @@ class RegisterAPIView(APIView):
             {'message': 'User yaratildi'},
             status=status.HTTP_201_CREATED
         )
+
+
 class LoginAPIView(APIView):
 
     def post(self, request):
@@ -125,6 +121,8 @@ class LoginAPIView(APIView):
             {'error': 'Login yoki parol xato'},
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
 class LogoutAPIView(APIView):
 
     def post(self, request):
@@ -138,21 +136,32 @@ class LogoutAPIView(APIView):
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    permission_classes = [
+        IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly,
+    ]
+
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
-    search_fields=[
+
+    search_fields = [
         'title',
         'content',
     ]
-    filterset_fields=[
+
+    filterset_fields = [
         'title',
         'created_at',
     ]
-    ordering_fields=[
+
+    ordering_fields = [
         'created_at',
         'title',
     ]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
