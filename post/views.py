@@ -5,8 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -20,7 +22,9 @@ class PostListCreateAPIView(APIView):
     def get(self, request):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
+
         return Response(serializer.data)
+
 
     def post(self, request):
         serializer = PostSerializer(data=request.data)
@@ -44,10 +48,14 @@ class PostDetailAPIView(APIView):
     def get_object(self, pk):
         return Post.objects.get(id=pk)
 
+
     def get(self, request, pk):
         post = self.get_object(pk)
+
         serializer = PostSerializer(post)
+
         return Response(serializer.data)
+
 
     def put(self, request, pk):
         post = self.get_object(pk)
@@ -67,8 +75,10 @@ class PostDetailAPIView(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+
     def delete(self, request, pk):
         post = self.get_object(pk)
+
         post.delete()
 
         return Response(
@@ -80,22 +90,26 @@ class PostDetailAPIView(APIView):
 class RegisterAPIView(APIView):
 
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        confirm_password = request.data.get('confirm_password')
+
+        username = request.data.get("username")
+        password = request.data.get("password")
+        confirm_password = request.data.get("confirm_password")
+
 
         if password != confirm_password:
             return Response(
-                {'error': 'Parollar mos emas'},
+                {"error": "Parollar mos emas"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
 
         user = User(username=username)
         user.set_password(password)
         user.save()
 
+
         return Response(
-            {'message': 'User yaratildi'},
+            {"message": "User yaratildi"},
             status=status.HTTP_201_CREATED
         )
 
@@ -103,22 +117,28 @@ class RegisterAPIView(APIView):
 class LoginAPIView(APIView):
 
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
+
+        username = request.data.get("username")
+        password = request.data.get("password")
+
 
         user = authenticate(
             username=username,
             password=password
         )
 
+
         if user:
+
             login(request, user)
+
             return Response(
-                {'message': 'Login successful'}
+                {"message": "Login successful"}
             )
 
+
         return Response(
-            {'error': 'Login yoki parol xato'},
+            {"error": "Login yoki parol xato"},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -126,21 +146,32 @@ class LoginAPIView(APIView):
 class LogoutAPIView(APIView):
 
     def post(self, request):
+
         logout(request)
 
         return Response(
-            {'message': 'Logout successful'}
+            {"message": "Logout successful"}
         )
 
 
+
 class PostViewSet(ModelViewSet):
-    queryset = Post.objects.all()
+
+    # N+1 optimization
+    # author ForeignKey bo'lgani uchun select_related ishlatiladi
+    queryset = Post.objects.select_related(
+        "author"
+    ).all()
+
+
     serializer_class = PostSerializer
+
 
     permission_classes = [
         IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly,
     ]
+
 
     filter_backends = [
         DjangoFilterBackend,
@@ -148,20 +179,27 @@ class PostViewSet(ModelViewSet):
         filters.OrderingFilter,
     ]
 
+
     search_fields = [
-        'title',
-        'content',
+        "title",
+        "content",
     ]
+
 
     filterset_fields = [
-        'title',
-        'created_at',
+        "title",
+        "created_at",
     ]
+
 
     ordering_fields = [
-        'created_at',
-        'title',
+        "created_at",
+        "title",
     ]
 
+
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+
+        serializer.save(
+            author=self.request.user
+        )

@@ -25,28 +25,31 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('admin/', admin.site.urls),
+    path("", home, name="home"),
+    path("admin/", admin.site.urls),
 
-    path('posts/', include('posts.urls')),
-    path('api/', include('accounts.urls')),
-    path('shop/', include('shop.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('posts/', include('posts.urls')),
-    path('api/', include('shop.urls')),
-    path('', include('post.urls')),
-    path('api/', include('post.urls')),
+    # Accounts
+    path("accounts/", include("accounts.urls")),
 
-    # JWT Authentication
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # Shop
+    path("shop/", include("shop.urls")),
+
+    # Eski posts app
+    path("posts/", include("posts.urls")),
+
+    # Normativ post API
+    path("api/", include("post.urls")),
+
+    # JWT
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
     # Swagger
     re_path(
-        r'^swagger/$',
-        schema_view.with_ui('swagger', cache_timeout=0),
-        name='swagger',
+        r"^swagger/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="swagger",
     ),
 
-    path('i18n/', include('django.conf.urls.i18n')),
+    path("i18n/", include("django.conf.urls.i18n")),
 ]
