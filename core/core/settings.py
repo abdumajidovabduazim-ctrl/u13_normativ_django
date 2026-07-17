@@ -158,3 +158,23 @@ LOGGING = {
         },
     },
 }
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+
+CELERY_ACCEPT_CONTENT = [
+    "json"
+]
+
+CELERY_TASK_SERIALIZER = "json"
+
+
+CELERY_TIMEZONE = "Asia/Tashkent"
+
+
+CELERY_BEAT_SCHEDULE = {
+
+    "check-old-posts-every-minute": {
+        "task": "post.tasks.check_old_posts",
+        "schedule": 60.0,
+    },
+
+}

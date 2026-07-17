@@ -15,6 +15,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Post
 from .serializers import PostSerializer
 from .permission import IsOwnerOrReadOnly
+from .tasks import check_old_posts
 
 
 class PostListCreateAPIView(APIView):
@@ -77,6 +78,7 @@ class PostDetailAPIView(APIView):
 
 
     def delete(self, request, pk):
+
         post = self.get_object(pk)
 
         post.delete()
@@ -97,6 +99,7 @@ class RegisterAPIView(APIView):
 
 
         if password != confirm_password:
+
             return Response(
                 {"error": "Parollar mos emas"},
                 status=status.HTTP_400_BAD_REQUEST
@@ -104,7 +107,9 @@ class RegisterAPIView(APIView):
 
 
         user = User(username=username)
+
         user.set_password(password)
+
         user.save()
 
 
@@ -157,8 +162,7 @@ class LogoutAPIView(APIView):
 
 class PostViewSet(ModelViewSet):
 
-    # N+1 optimization
-    # author ForeignKey bo'lgani uchun select_related ishlatiladi
+
     queryset = Post.objects.select_related(
         "author"
     ).all()
@@ -203,3 +207,5 @@ class PostViewSet(ModelViewSet):
         serializer.save(
             author=self.request.user
         )
+
+        check_old_posts.delay()
